@@ -1,6 +1,6 @@
 """불량 도구 (4개) — 불량 요약, 유형별, 원인별, 추이."""
 
-from tools import query, to_json
+from tools import query, to_json, log_call
 
 
 def register(mcp):
@@ -21,6 +21,7 @@ def register(mcp):
             line_type: 라인 타입 필터. 빈 문자열이면 전체.
             product_code: 제품코드 필터. 빈 문자열이면 전체.
         """
+        log_call("get_defect_summary", date_start=date_start, date_end=date_end, line_type=line_type, product_code=product_code)
         sql = """
         SELECT
             pline.line_type AS 라인,
