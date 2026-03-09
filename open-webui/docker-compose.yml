@@ -3,11 +3,27 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: factory-open-webui
     ports:
-      - "3006:8080"
-    volumes:
-      - open-webui-data:/app/backend/data
+      - "3009:8080"
+    environment:
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      WEBUI_SECRET_KEY: factory-mcp-secret-2026
+      DEFAULT_USER_ROLE: user
+      ENABLE_SIGNUP: "true"
+      ENABLE_FOLLOW_UP_GENERATION: "true"
+      TASK_MODEL: qwen2.5:14b
+      FOLLOW_UP_GENERATION_PROMPT_TEMPLATE: >
+        당신은 자동차 공장 MES 시스템의 후속 질문 생성기입니다.
+        대화 내용을 바탕으로 사용자가 다음에 물어볼 만한 질문 3~5개를 추천하세요.
+
+        사용 가능한 분석 도구: 생산 실적 조회 (일별/제품별/달성율), 불량 분석 (유형별/원인별/설비별/추이), 설비 관리 (가동중단/정비이력/공정파라미터 이상), 품질/자재/작업자 성과/기간 비교.
+
+        규칙: 현재 대화에서 드러난 문제를 더 깊이 파고드는 질문 우선. 관련된 다른 관점(불량→원인→설비→정비)으로 확장하는 질문 포함. 구체적 기간이나 라인을 포함한 실행 가능한 질문으로 작성. 한국어로 작성. JSON 배열로만 반환: ["질문1", "질문2", ...]
+
+        예시 - 대화가 "도장 라인 불량률"에 대한 것이었다면: ["도장 라인 불량의 주요 원인 TOP 5는?", "최근 1주 vs 이전 1주 도장 불량률 추이 비교", "도장 라인 설비별 불량 발생 현황은?", "도장 라인 최근 정비 이력 조회"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - open-webui-data:/app/backend/data
     restart: unless-stopped
 
 volumes:

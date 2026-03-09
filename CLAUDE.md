@@ -12,7 +12,7 @@ User → Open WebUI (:3006) → MCP Server (:8501) → SQLite (factory.db)
 - Python 3.12+ / `.venv/`
 - FastMCP (Streamable HTTP, :8501)
 - SQLite / Oracle 듀얼 백엔드
-- Docker: Open WebUI
+- Docker: Open WebUI → Ollama (qwen2.5:14b, tool calling) → MCP
 
 ## 구조
 ```
@@ -23,7 +23,10 @@ db/
 ├── seed.py          # 60일 시뮬레이션 데이터
 ├── connection.py    # 브릿지 패턴 (query/execute)
 └── backends/        # SQLite / Oracle 자동 전환
-open-webui/          # Docker Compose
+open-webui/
+├── docker-compose.yml    # Open WebUI (Ollama 직접 연결)
+├── model_preset.json     # "Factory MES 분석가" 모델 프리셋 백업
+└── saved_prompts.json    # 저장 프롬프트 5개 백업 (/daily, /defect, /shift, /trend, /morning)
 ```
 
 ## 테이블 14개
@@ -96,7 +99,27 @@ python mcp_server.py       # MCP 서버 (:8501)
 ```bash
 cd open-webui && docker compose up -d   # :3006
 ```
-Admin → Settings → Tools → MCP Servers → `http://host.docker.internal:8501/mcp`
+
+### Docker 재시작 후 Admin Panel 설정 (1회)
+1. **MCP 연결**: Settings → Tools → "+" → URL: `http://host.docker.internal:8501/mcp` → 15개 도구 자동 등록
+2. **모델 프리셋**: Workspace → Models → "+" → `model_preset.json` 내용 입력 (시스템 프롬프트 + 시작 질문 칩 5개)
+3. **저장 프롬프트**: Workspace → Prompts → "+" → `saved_prompts.json`의 5개 등록
+4. **기본 모델**: Settings → Interface → Default Model → "Factory MES 분석가" 선택
+
+### 저장 프롬프트 (/ 명령어)
+| 명령어 | 용도 |
+|--------|------|
+| `/daily` | 일일 생산 보고 |
+| `/defect` | 불량 분석 |
+| `/shift` | 교대 비교 |
+| `/trend` | 생산 추이 차트 |
+| `/morning` | 아침 브리핑 |
+
+### 시각화
+- 추이/트렌드 → Vega-Lite 라인 차트 (Open WebUI 인라인 렌더링)
+- 비교 데이터 → Vega-Lite 막대 차트
+- 인과관계/흐름 → Mermaid 다이어그램
+- "차트", "그래프", "시각화", "추이" 키워드 시 자동 적용
 
 ## 데모 질문 예시
 - "오늘 생산 현황 알려줘" → get_daily_production_summary
@@ -104,3 +127,4 @@ Admin → Settings → Tools → MCP Servers → `http://host.docker.internal:85
 - "전주 대비 생산량 비교해줘" → get_period_comparison
 - "설비 정비 이력 보여줘" → get_maintenance_history
 - "작업자별 실적 비교" → get_worker_performance
+- "최근 2주 생산 추이 차트로" → get_defect_trend + Vega-Lite 차트
