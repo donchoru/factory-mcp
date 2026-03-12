@@ -1,0 +1,14 @@
+[project]
+name = "factory-mcp"
+version = "0.1.0"
+description = "Factory MCP — 자동차 공장 MES 데이터 MCP 서버 (15개 도구)"
+readme = "CLAUDE.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "oracledb>=2.0.0",
+]
+
+[project.scripts]
+factory-mcp = "mcp_server:main"

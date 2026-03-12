@@ -10,7 +10,7 @@
 from fastmcp import FastMCP
 from tools import production, defect, equipment, analytics
 
-mcp = FastMCP("Factory AI")
+mcp = FastMCP("FLOPI MCP")
 
 # 각 모듈의 register()가 @mcp.tool() 데코레이터로 도구 등록
 production.register(mcp)
@@ -18,5 +18,9 @@ defect.register(mcp)
 equipment.register(mcp)
 analytics.register(mcp)
 
-if __name__ == "__main__":
+def main():
     mcp.run(transport="streamable-http", host="0.0.0.0", port=8501)
+
+
+if __name__ == "__main__":
+    main()
