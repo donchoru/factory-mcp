@@ -102,9 +102,6 @@ open-webui/
 
 # Windows (PowerShell)
 .venv\Scripts\python.exe mcp_server.py
-
-# Windows (CMD)
-.venv\Scripts\python.exe mcp_server.py
 ```
 
 ## Open WebUI 연동
