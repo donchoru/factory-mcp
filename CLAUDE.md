@@ -89,10 +89,10 @@ open-webui/
 
 ## 실행
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python -m db.seed          # DB 재생성 (factory.db)
-python mcp_server.py       # MCP 서버 (:8501)
+python3.11 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python -m db.seed      # DB 재생성 (factory.db)
+.venv/bin/python mcp_server.py   # MCP 서버 (:8501)
 ```
 
 ## Open WebUI 연동
