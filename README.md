@@ -14,22 +14,53 @@ User → Open WebUI (:3006) ──→ MCP Server (:8501) → SQLite (factory.db)
 - LangGraph 없음 (멀티스텝 추론 불필요)
 - Open WebUI의 내장 MCP 기능만 사용
 
+## 요구사항
+
+- **Python 3.11 이상**
+- 운영체제: Windows / macOS / Linux
+
 ## 빠른 시작
 
+### 자동 설정 (권장)
+
 ```bash
-# 1. 환경 설정
 git clone https://github.com/donchoru/factory-mcp.git
 cd factory-mcp
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+chmod +x setup.sh
+./setup.sh          # venv + pip + DB seed
+```
 
-# 2. DB 생성 (60일 시뮬레이션 데이터)
-python -m db.seed
+### 수동 설정
 
-# 3. MCP 서버 시작
-python mcp_server.py    # :8501
+**macOS / Linux:**
+```bash
+python3.11 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python -m db.seed          # DB 생성 (60일 시뮬레이션)
+```
 
-# 4. Open WebUI 시작 (Docker)
+**Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.venv\Scripts\pip.exe install -r requirements.txt
+.venv\Scripts\python.exe -m db.seed
+```
+
+### 실행
+
+**macOS / Linux:**
+```bash
+.venv/bin/python mcp_server.py       # MCP 서버 (:8501)
+```
+
+**Windows (PowerShell):**
+```powershell
+.venv\Scripts\python.exe mcp_server.py
+```
+
+### Open WebUI (Docker)
+
+```bash
 cd open-webui && docker compose up -d    # :3006
 ```
 
