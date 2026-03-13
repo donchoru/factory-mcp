@@ -117,8 +117,11 @@ echo -e "${BOLD}╚════════════════════�
 echo ""
 echo -e "${BOLD}실행 방법:${NC}"
 echo ""
-echo -e "  ${YELLOW}# MCP 서버 시작${NC}"
+echo -e "  ${YELLOW}# macOS / Linux${NC}"
 echo "  .venv/bin/python mcp_server.py"
+echo ""
+echo -e "  ${YELLOW}# Windows (PowerShell)${NC}"
+echo '  .venv\Scripts\python.exe mcp_server.py'
 echo ""
 echo -e "${BOLD}접속:${NC}"
 echo -e "  MCP 엔드포인트  →  ${GREEN}http://localhost:8501/mcp${NC}"

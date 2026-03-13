@@ -9,7 +9,7 @@ User → Open WebUI (:3006) → MCP Server (:8501) → SQLite (factory.db)
 ```
 
 ## 기술 스택
-- Python 3.12+ / `.venv/`
+- Python 3.11+ / `.venv/`
 - FastMCP (Streamable HTTP, :8501)
 - SQLite / Oracle 듀얼 백엔드
 - Docker: Open WebUI → Ollama (qwen2.5:14b, tool calling) → MCP
@@ -88,11 +88,23 @@ open-webui/
 - 데모 질문: "도장 불량률이 왜 높아?" → defect_summary → defect_by_cause → "노즐 마모"
 
 ## 실행
+
+### 초기 설정
 ```bash
-python3.11 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python -m db.seed      # DB 재생성 (factory.db)
-.venv/bin/python mcp_server.py   # MCP 서버 (:8501)
+./setup.sh             # 자동 설정 (venv + pip + DB seed)
+./setup.sh --reset     # DB 재생성
+```
+
+### MCP 서버 시작
+```bash
+# macOS / Linux
+.venv/bin/python mcp_server.py
+
+# Windows (PowerShell)
+.venv\Scripts\python.exe mcp_server.py
+
+# Windows (CMD)
+.venv\Scripts\python.exe mcp_server.py
 ```
 
 ## Open WebUI 연동
